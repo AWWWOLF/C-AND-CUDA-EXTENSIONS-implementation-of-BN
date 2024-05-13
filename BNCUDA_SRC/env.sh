@@ -1,0 +1,1 @@
+conda create --name BNCUDA python=3.11 setuptools==69.5.1 torch==2.3.0 tqdm==4.66.1
