@@ -76,17 +76,17 @@ std::vector<at::Tensor> bn_cuda_forward(
     at::Tensor mode)
 {
   //获取张量尺寸
-  const auto M = X.size(1);
-  const auto D = X.size(0);
+  const auto M = X.size(0);
+  const auto D = X.size(1);
   const auto H = X.size(2);
   const auto W = X.size(3);
   const auto stats = mode.numel();
   const auto state_size = M * H * W;
-  const auto batch_size = X.size(0);
+  const auto batch_size = X.size(1);
 
   //初始化张量
-  auto output = at::empty({D, M, H, W}, X.options());
-  auto out_ = at::empty({D, M, H, W}, X.options());
+  auto output = at::empty({M, D, H, W}, X.options());
+  auto out_ = at::empty({M, D, H, W}, X.options());
   auto sample_mean = at::empty(D, X.options());
   auto sample_var = at::empty(D, X.options());
   auto var = at::empty(D, X.options());
@@ -176,17 +176,17 @@ std::vector<at::Tensor> bn_cuda_backward(
     at::Tensor out_,
     at::Tensor gamma)
 {
-  const auto M = dout.size(1);
-  const auto D = dout.size(0);
+  const auto M = dout.size(0);
+  const auto D = dout.size(1);
   const auto H = dout.size(2);
   const auto W = dout.size(3);
   const auto state_size = M * H * W;
-  const auto batch_size = dout.size(0);
+  const auto batch_size = dout.size(1);
 
   auto dbeta = at::empty(state_size, dout.options());
   auto dgamma = at::empty(state_size, dout.options());
   auto dX = at::empty_like(dout);
-  auto dY = dout.mm(gamma.unsqueeze(1).unsqueeze(2).unsqueeze(3)).contiguous();
+  auto dY = dout.mm(gamma.unsqueeze(0).unsqueeze(2).unsqueeze(3)).contiguous();
   auto dYmean =  at::empty_like(dY);
   auto dZ = dY.mm(out_).contiguous();
   auto dZmean =  at::empty_like(dZ);

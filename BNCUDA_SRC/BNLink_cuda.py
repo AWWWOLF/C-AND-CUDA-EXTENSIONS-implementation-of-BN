@@ -6,10 +6,8 @@ import BatchNormCuda
 class BNFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, X, gamma, beta, running_mean, running_var, eps, momentum, mode):
-        X = X.permute(1, 0, 2, 3).contiguous()
         outputs = BatchNormCuda.forward(X, gamma, beta, running_mean, running_var, eps, momentum, mode)
         output = outputs[0]
-        output = output.permute(1, 0, 2, 3).contiguous()
         var = outputs[1]
         out_ = outputs[2]
         gamma = outputs[3]
@@ -19,10 +17,8 @@ class BNFunction(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, dout):
-        dout = dout.permute(1, 0, 2, 3).contiguous()
         outputs = BatchNormCuda.backward(dout.contiguous(), *ctx.saved_variables)
         dX, dgamma, dbeta = outputs
-        dX = dX.permute(1, 0, 2, 3).contiguous()
         return dX, dgamma, dbeta, None, None, None, None, None
 
 class BNCUDA(torch.nn.Module):
