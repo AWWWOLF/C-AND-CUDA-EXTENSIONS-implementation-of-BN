@@ -19,7 +19,7 @@ class BNFunction(torch.autograd.Function):
     def backward(ctx, dout):
         outputs = BatchNorm.backward(dout.contiguous(), *ctx.saved_variables)
         dX, dgamma, dbeta = outputs
-        return dX, dgamma, dbeta
+        return dX, dgamma, dbeta, None, None, None, None, None
 
 class BN(torch.nn.Module):
     def __init__(self, num_features, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True):

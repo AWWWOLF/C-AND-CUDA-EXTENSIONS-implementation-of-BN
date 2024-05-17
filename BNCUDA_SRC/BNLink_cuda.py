@@ -23,7 +23,7 @@ class BNFunction(torch.autograd.Function):
         outputs = BatchNormCuda.backward(dout.contiguous(), *ctx.saved_variables)
         dX, dgamma, dbeta = outputs
         dX = dX.permute(1, 0, 2, 3).contiguous()
-        return dX, dgamma, dbeta
+        return dX, dgamma, dbeta, None, None, None, None, None
 
 class BNCUDA(torch.nn.Module):
     def __init__(self, num_features, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True):
