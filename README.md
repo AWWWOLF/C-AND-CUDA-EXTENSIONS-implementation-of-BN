@@ -2,7 +2,7 @@
 ### This is a homework from my Deeplearning lesson. It may not be a professional one.  
 ### These code realize the function of Batch Normalization with c++ or c++&CUDA.  
 ### When you firstly download it in to your computer, please enter the file, run:  
-bash env.sh  
+```bash env.sh```  
 ### then, run:  
 ```conda activate BNCUDA```   
 ### then if you want to use c++ extension, run:  
